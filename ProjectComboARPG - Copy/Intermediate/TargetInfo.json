@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "ProjectComboARPG",
+			"Path": "..\\Source\\ProjectComboARPG.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "ProjectComboARPGEditor",
+			"Path": "..\\Source\\ProjectComboARPGEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

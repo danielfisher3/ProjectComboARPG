@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\ProjectComboARPG.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\ProjectComboARPG.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\ProjectComboARPGEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\ProjectComboARPG">
+      <UniqueIdentifier>{48E1C499-52F5-395B-B7CF-E78BD9FAB27E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\ProjectComboARPG\ProjectComboARPG.Build.cs">
+      <Filter>Source\ProjectComboARPG</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\ProjectComboARPG\ProjectComboARPG.cpp">
+      <Filter>Source\ProjectComboARPG</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\ProjectComboARPG.h">
+      <Filter>Source\ProjectComboARPG</Filter>
+    </ClInclude>
+    <Filter Include="Source\ProjectComboARPG\Private">
+      <UniqueIdentifier>{D2A77FA9-DEC6-3C2A-82D1-CC164C8B562F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ProjectComboARPG\Private\AnimInstances">
+      <UniqueIdentifier>{F5F78E26-90CB-3F11-A951-D006DC9D911E}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ProjectComboARPG\Private\AnimInstances\PlayerAnimInstance.cpp">
+      <Filter>Source\ProjectComboARPG\Private\AnimInstances</Filter>
+    </ClCompile>
+    <Filter Include="Source\ProjectComboARPG\Private\Characters">
+      <UniqueIdentifier>{D84D6BE5-3ABB-3AEC-B41F-0946AD6A0656}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ProjectComboARPG\Private\Characters\PlayerCharacter.cpp">
+      <Filter>Source\ProjectComboARPG\Private\Characters</Filter>
+    </ClCompile>
+    <Filter Include="Source\ProjectComboARPG\Private\Controllers">
+      <UniqueIdentifier>{002724E4-D4CA-33E4-A144-DC6F5BF6A01F}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ProjectComboARPG\Private\Controllers\PlController.cpp">
+      <Filter>Source\ProjectComboARPG\Private\Controllers</Filter>
+    </ClCompile>
+    <Filter Include="Source\ProjectComboARPG\Private\GameModes">
+      <UniqueIdentifier>{3FA0EDF6-8FA7-3BB9-B074-6F2B93B36115}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ProjectComboARPG\Private\GameModes\TestGameMode.cpp">
+      <Filter>Source\ProjectComboARPG\Private\GameModes</Filter>
+    </ClCompile>
+    <Filter Include="Source\ProjectComboARPG\Private\PlayerComponents">
+      <UniqueIdentifier>{F42ED269-25C6-3F43-B064-B89F178C181F}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ProjectComboARPG\Private\PlayerComponents\PlayerCombatComp.cpp">
+      <Filter>Source\ProjectComboARPG\Private\PlayerComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ProjectComboARPG\Private\PlayerComponents\PlayerStatsComponent.cpp">
+      <Filter>Source\ProjectComboARPG\Private\PlayerComponents</Filter>
+    </ClCompile>
+    <Filter Include="Source\ProjectComboARPG\Public">
+      <UniqueIdentifier>{EE0518A8-5A2C-330C-9B68-88B76D9D8C51}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\Public\PlayerCombatStatus.h">
+      <Filter>Source\ProjectComboARPG\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\Public\PlayerStatus.h">
+      <Filter>Source\ProjectComboARPG\Public</Filter>
+    </ClInclude>
+    <Filter Include="Source\ProjectComboARPG\Public\AnimInstances">
+      <UniqueIdentifier>{4CD64A8F-CB1E-3A60-8A30-CB50E8BF96C6}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\Public\AnimInstances\PlayerAnimInstance.h">
+      <Filter>Source\ProjectComboARPG\Public\AnimInstances</Filter>
+    </ClInclude>
+    <Filter Include="Source\ProjectComboARPG\Public\Characters">
+      <UniqueIdentifier>{7AC57A99-040F-37E4-B726-1FF167A5C2FD}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\Public\Characters\PlayerCharacter.h">
+      <Filter>Source\ProjectComboARPG\Public\Characters</Filter>
+    </ClInclude>
+    <Filter Include="Source\ProjectComboARPG\Public\Controllers">
+      <UniqueIdentifier>{85388755-5ACB-3299-AD26-D6A54EA82BF9}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\Public\Controllers\PlController.h">
+      <Filter>Source\ProjectComboARPG\Public\Controllers</Filter>
+    </ClInclude>
+    <Filter Include="Source\ProjectComboARPG\Public\GameModes">
+      <UniqueIdentifier>{873E2175-5AB3-3E74-9EFC-F912672FACF7}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\Public\GameModes\TestGameMode.h">
+      <Filter>Source\ProjectComboARPG\Public\GameModes</Filter>
+    </ClInclude>
+    <Filter Include="Source\ProjectComboARPG\Public\PlayerComponents">
+      <UniqueIdentifier>{C392F465-6300-3D2F-A3FB-CEFB85232FC5}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\Public\PlayerComponents\PlayerCombatComp.h">
+      <Filter>Source\ProjectComboARPG\Public\PlayerComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ProjectComboARPG\Public\PlayerComponents\PlayerStatsComponent.h">
+      <Filter>Source\ProjectComboARPG\Public\PlayerComponents</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

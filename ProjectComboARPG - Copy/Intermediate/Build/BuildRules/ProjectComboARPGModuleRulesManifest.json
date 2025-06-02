@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"C:\\Users\\Daniel\\Documents\\Unreal Projects\\ProjectComboARPG\\Source\\ProjectComboARPG\\ProjectComboARPG.Build.cs",
+		"C:\\Users\\Daniel\\Documents\\Unreal Projects\\ProjectComboARPG\\Source\\ProjectComboARPG.Target.cs",
+		"C:\\Users\\Daniel\\Documents\\Unreal Projects\\ProjectComboARPG\\Source\\ProjectComboARPGEditor.Target.cs"
+	],
+	"EngineVersion": "5.3.2"
+}

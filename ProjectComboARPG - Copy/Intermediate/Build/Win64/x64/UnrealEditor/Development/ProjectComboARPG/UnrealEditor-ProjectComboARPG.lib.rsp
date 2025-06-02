@@ -1,0 +1,27 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-ProjectComboARPG.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\ProjectComboARPGEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerAnimInstance.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerCharacter.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerCombatComp.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerCombatStatus.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerStatsComponent.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerStatus.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlController.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\ProjectComboARPG.init.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\TestGameMode.gen.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\ProjectComboARPG.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerAnimInstance.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerCharacter.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlController.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\TestGameMode.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerCombatComp.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\PlayerStatsComponent.cpp.obj"
+"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\Default.rc2.res"
+/OUT:"C:\Users\Daniel\Documents\Unreal Projects\ProjectComboARPG\Intermediate\Build\Win64\x64\UnrealEditor\Development\ProjectComboARPG\UnrealEditor-ProjectComboARPG.lib"
