@@ -19,9 +19,6 @@ public:
 	EOneHandedWeaponType OHType = EOneHandedWeaponType::EOHWT_MAX;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMesh* WeaponMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString WeaponName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

@@ -10,6 +10,9 @@ AOneHandedWeapon::AOneHandedWeapon():
  	
 	PrimaryActorTick.bCanEverTick = true;
 
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	SetRootComponent(StaticMeshComponent);
+
 }
 
 
@@ -37,6 +40,7 @@ void AOneHandedWeapon::InitializeWeapon(UDataTable* WeaponDataTable)
 	if (WeaponRow)
 	{
 		DamageOfWeapon = WeaponRow->Damage;
+		
 	}
 }
 
