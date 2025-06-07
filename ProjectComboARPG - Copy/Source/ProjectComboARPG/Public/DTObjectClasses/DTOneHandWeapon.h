@@ -22,7 +22,7 @@ public:
 	FString WeaponName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Damage;
+	float Damage;
 };
 
 
@@ -30,6 +30,22 @@ UCLASS()
 class PROJECTCOMBOARPG_API UDTOneHandWeapon : public UObject
 {
 	GENERATED_BODY()
+
+	UDTOneHandWeapon();
+
+public:
+
+	UFUNCTION(BlueprintCallable)
+	void SetOneHandedWeaponDetails(FString _Name, float _Damage, EOneHandedWeaponType _Type);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EOneHandedWeaponType OneHandedWeaponType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString WeaponName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float WeaponDamage;
 
 	
 	

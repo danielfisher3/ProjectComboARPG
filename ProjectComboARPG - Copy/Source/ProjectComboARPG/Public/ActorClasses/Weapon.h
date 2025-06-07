@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "DTObjectClasses/DTOneHandWeapon.h"
 #include "Weapon.generated.h"
 
 UCLASS()
@@ -21,9 +22,20 @@ protected:
 	
 	virtual void BeginPlay() override;
 
+	void InitializeWeapon(UDataTable* WeaponDataTable);
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UDataTable* WeaponTableToUse;
+	
+	UPROPERTY(EditAnywhere)
+	FName NameOfWeapon;
+
 
 private:
 
-	
+	UPROPERTY(VisibleAnywhere)
+	float DamageOfWeapon;
 
 };
