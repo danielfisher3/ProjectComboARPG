@@ -19,10 +19,15 @@ public:
 	EOneHandedWeaponType OHType = EOneHandedWeaponType::EOHWT_MAX;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMesh* WeaponMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString WeaponName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage;
+
+	
 };
 
 
@@ -31,22 +36,5 @@ class PROJECTCOMBOARPG_API UDTOneHandWeapon : public UObject
 {
 	GENERATED_BODY()
 
-	UDTOneHandWeapon();
-
-public:
-
-	UFUNCTION(BlueprintCallable)
-	void SetOneHandedWeaponDetails(FString _Name, float _Damage, EOneHandedWeaponType _Type);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EOneHandedWeaponType OneHandedWeaponType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString WeaponName;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float WeaponDamage;
-
-	
 	
 };

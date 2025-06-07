@@ -5,16 +5,16 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "DTObjectClasses/DTOneHandWeapon.h"
-#include "Weapon.generated.h"
+#include "OneHandedWeapon.generated.h"
 
 UCLASS()
-class PROJECTCOMBOARPG_API AWeapon : public AActor
+class PROJECTCOMBOARPG_API AOneHandedWeapon : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	
-	AWeapon();
+	AOneHandedWeapon();
 
 	virtual void Tick(float DeltaTime) override;
 
@@ -24,14 +24,13 @@ protected:
 
 	void InitializeWeapon(UDataTable* WeaponDataTable);
 
-public:
-
+public:	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UDataTable* WeaponTableToUse;
-	
+
 	UPROPERTY(EditAnywhere)
 	FName NameOfWeapon;
-
 
 private:
 
