@@ -45,8 +45,8 @@ APlayerCharacter::APlayerCharacter():
 	Camera->bUsePawnControlRotation = false;
 
 	/*Create Actor Components*/
-	PlayerCombatComp = CreateDefaultSubobject<UPlayerCombatComp>(TEXT("PlayerCombatComp"));
-	PlayerStatsComp = CreateDefaultSubobject<UPlayerStatsComponent>(TEXT("PlayerStatsComp"));
+	//PlayerCombatComp = CreateDefaultSubobject<UPlayerCombatComp>(TEXT("PlayerCombatComp"));
+	//PlayerStatsComp = CreateDefaultSubobject<UPlayerStatsComponent>(TEXT("PlayerStatsComp"));
 	/*<Create Components and Set Controller Values>*/
 }
 
