@@ -114,11 +114,11 @@ bool APlayerCharacter::CheckIfCanChangePlayerStatusToJumpOrDodge()
 void APlayerCharacter::PlayerStatusManager()
 {
 	/*Eliminates jumping and dodging overwriting each other*/
-	if (GetCharacterMovement()->IsFalling() && GetPlayerStatus()!=EPlayerStatus::EPS_Dodging)SetPlayerStatus(EPlayerStatus::EPS_Falling);
+	//if (GetCharacterMovement()->IsFalling() && GetPlayerStatus()!=EPlayerStatus::EPS_Dodging)SetPlayerStatus(EPlayerStatus::EPS_Falling);
 	/*Checks if player is in a status where they can jump*/
 	bCanJump = CheckIfCanChangePlayerStatusToJumpOrDodge();
 	/*Checks if player is in a status where they can Dodge*/
-	bCanDodge = CheckIfCanChangePlayerStatusToJumpOrDodge();
+	//bCanDodge = CheckIfCanChangePlayerStatusToJumpOrDodge();
 }
 
 /**Move functionality for the player*/
