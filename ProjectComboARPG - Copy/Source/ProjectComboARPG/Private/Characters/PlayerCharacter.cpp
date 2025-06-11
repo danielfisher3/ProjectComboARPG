@@ -118,7 +118,7 @@ void APlayerCharacter::PlayerStatusManager()
 	/*Checks if player is in a status where they can jump*/
 	bCanJump = CheckIfCanChangePlayerStatusToJumpOrDodge();
 	/*Checks if player is in a status where they can Dodge*/
-	//bCanDodge = CheckIfCanChangePlayerStatusToJumpOrDodge();
+	bCanDodge = CheckIfCanChangePlayerStatusToJumpOrDodge();
 }
 
 /**Move functionality for the player*/
