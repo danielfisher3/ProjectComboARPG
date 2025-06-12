@@ -3,11 +3,13 @@
 
 #include "PlayerComponents/PlayerCombatComp.h"
 #include "Characters/PlayerCharacter.h"
+#include "TimerManager.h"
 
 
 UPlayerCombatComp::UPlayerCombatComp():
 	/*Variable Initialization*/
-	WeaponStatus(EPlayerWeaponStatus::EPWS_Unarmed)
+	WeaponStatus(EPlayerWeaponStatus::EPWS_Unarmed),
+	ComboCount(0)
 {
 	
 	PrimaryComponentTick.bCanEverTick = true;
@@ -23,6 +25,7 @@ void UPlayerCombatComp::BeginPlay()
 	
 	
 }
+
 
 
 void UPlayerCombatComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -42,13 +45,43 @@ void UPlayerCombatComp::LightAttack()
 	switch (WeaponStatus)
 	{
 	case EPlayerWeaponStatus::EPWS_Unarmed:
-		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied) 
+		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied)
 		{
-			UAnimInstance* AnimInstance = PLChar->GetMesh()->GetAnimInstance();
-			if (AnimInstance && LightAttackMontageUnarmed1) 
+
+
+			ComboCount++;
+
+			switch (ComboCount)
 			{
-				AnimInstance->Montage_Play(LightAttackMontageUnarmed1);
+			case 1:
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Light Attack 1"));
+
+				}
+				break;
+
+			case 2:
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Light Attack 2"));
+
+				}
+				break;
+
+			case 3:
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Light Attack 3"));
+
+				}
+				break;
+
+			default:
+				ResetCombo();
+				return;
 			}
+			PLChar->GetWorldTimerManager().SetTimer(ComboTimerHandle, this, &UPlayerCombatComp::ResetCombo, ComboWindow, false);
 		}
 		break;
 	case EPlayerWeaponStatus::EPWS_ArmedMelee:
@@ -69,11 +102,41 @@ void UPlayerCombatComp::HeavyAttack()
 	case EPlayerWeaponStatus::EPWS_Unarmed:
 		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied)
 		{
-			UAnimInstance* AnimInstance = PLChar->GetMesh()->GetAnimInstance();
-			if (AnimInstance && HeavyAttackMontageUnarmed1)
+
+
+			ComboCount++;
+
+			switch (ComboCount)
 			{
-				AnimInstance->Montage_Play(HeavyAttackMontageUnarmed1);
+			case 1:
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Heavy Attack 1"));
+
+				}
+				break;
+
+			case 2:
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Heavy Attack 2"));
+
+				}
+				break;
+
+			case 3:
+				if (GEngine)
+				{
+					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Heavy Attack 3"));
+
+				}
+				break;
+
+			default:
+				ResetCombo();
+				return;
 			}
+			PLChar->GetWorldTimerManager().SetTimer(ComboTimerHandle, this, &UPlayerCombatComp::ResetCombo, ComboWindow, false);
 		}
 		break;
 	case EPlayerWeaponStatus::EPWS_ArmedMelee:
@@ -136,6 +199,21 @@ void UPlayerCombatComp::LightSkillAttack()
 		break;
 	}
 }
+
+void UPlayerCombatComp::ResetCombo()
+{
+	ComboCount = 0;
+	bCanAttack = true;
+	PLChar->GetWorldTimerManager().ClearTimer(ComboTimerHandle);
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Reset Combo"));
+
+	}
+
+
+}
+
 
 
 

@@ -68,7 +68,22 @@ private:
 	UAnimMontage* HeavySkillAttackMontageUnarmed1;
 	/*<Attack Montages>*/
 
-		
+	/*Combo System*/
+	UPROPERTY(VisibleAnywhere, Category = "Combo")
+	int32 ComboCount;
+
+	UPROPERTY(EditAnywhere, Category = "Combo")
+	float ComboWindow = 0.5f;
+
+	UPROPERTY(VisibleAnywhere, Category = "Combo")
+	bool bCanAttack = true;
+
+	FTimerHandle ComboTimerHandle;
+
+	void ResetCombo();
+	/*Combo System*/
+
+
 public:
 	/*Getters and Setters*/
 	FORCEINLINE EPlayerWeaponStatus GetWeaponStatus()const { return WeaponStatus; }
