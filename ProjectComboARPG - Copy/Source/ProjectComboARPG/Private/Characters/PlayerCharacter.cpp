@@ -18,8 +18,7 @@ APlayerCharacter::APlayerCharacter():
 	BaseLookUpRate(45.f),
 	BaseTurnRate(45.f),
 	BaseMovementSpeed(600.f),
-	PlayerStatus(EPlayerStatus::EPS_Unoccupied),
-	DodgeForce(500.f)
+	PlayerStatus(EPlayerStatus::EPS_Unoccupied)
 	
 {
  	
@@ -79,10 +78,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
 		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Dodge);
-		EnhancedInputComponent->BindAction(LightAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LightAttack);
-		EnhancedInputComponent->BindAction(HeavyAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HeavyAttack);
-		EnhancedInputComponent->BindAction(LightSkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::LightSkillAttack);
-		EnhancedInputComponent->BindAction(HeavySkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::HeavySkillAttack);
+		EnhancedInputComponent->BindAction(LightAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LightAttackInput);
+		EnhancedInputComponent->BindAction(HeavyAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HeavyAttackInput);
+		EnhancedInputComponent->BindAction(LightSkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::LightSkillAttackInput);
+		EnhancedInputComponent->BindAction(HeavySkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::HeavySkillAttackInput);
 		
 	}
 
@@ -113,8 +112,7 @@ bool APlayerCharacter::CheckIfCanChangePlayerStatusToJumpOrDodge()
 /**Helps Maintain Order in Player Status Changing*/
 void APlayerCharacter::PlayerStatusManager()
 {
-	/*Eliminates jumping and dodging overwriting each other*/
-	//if (GetCharacterMovement()->IsFalling() && GetPlayerStatus()!=EPlayerStatus::EPS_Dodging)SetPlayerStatus(EPlayerStatus::EPS_Falling);
+	
 	/*Checks if player is in a status where they can jump*/
 	bCanJump = CheckIfCanChangePlayerStatusToJumpOrDodge();
 	/*Checks if player is in a status where they can Dodge*/
@@ -189,135 +187,41 @@ void APlayerCharacter::Dodge()
 			/*Play Dodge Montage*/
 			AnimInstance->Montage_Play(DodgeMontage);
 		}
-		/*Move Character in forward direction * Dodge force*/
-		LaunchCharacter(GetActorForwardVector() * DodgeForce, true, true);
+		
 		
 	}
 	
 }
 
-void APlayerCharacter::LightAttack()
+void APlayerCharacter::LightAttackInput()
 {
-	if (PlayerCombatComp == nullptr)return;
-	if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied) 
+	if (PlayerCombatComp) 
 	{
-		SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-		switch (PlayerCombatComp->GetWeaponStatus())
-		{
-		case EPlayerWeaponStatus::EPWS_Unarmed:
-			if (GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Green, TEXT("Light Attack Unarmed"));
-			}
-			if (PlayerCombatComp->GetLightAttackUnarmedMontage() != nullptr) 
-			{
-				UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-				if (PlayerCombatComp->GetLightAttackUnarmedMontage() && AnimInstance)
-				{
-					AnimInstance->Montage_Play(PlayerCombatComp->GetLightAttackUnarmedMontage());
-				}
-			}
-
-			break;
-		case EPlayerWeaponStatus::EPWS_ArmedMelee:
-			break;
-		case EPlayerWeaponStatus::EPWS_ArmedRanged:
-			break;
-		}
-	}
-	
-}
-
-void APlayerCharacter::HeavyAttack()
-{
-	if (PlayerCombatComp == nullptr)return;
-	if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied)
-	{
-		SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-		switch (PlayerCombatComp->GetWeaponStatus())
-		{
-		case EPlayerWeaponStatus::EPWS_Unarmed:
-			if (GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Green, TEXT("Heavy Attack Unarmed"));
-			}
-			if (PlayerCombatComp->GetHeavyAttackUnarmedMontage() != nullptr)
-			{
-				UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-				if (PlayerCombatComp->GetHeavyAttackUnarmedMontage() && AnimInstance)
-				{
-					AnimInstance->Montage_Play(PlayerCombatComp->GetHeavyAttackUnarmedMontage());
-				}
-			}
-
-			break;
-		case EPlayerWeaponStatus::EPWS_ArmedMelee:
-			break;
-		case EPlayerWeaponStatus::EPWS_ArmedRanged:
-			break;
-		}
+		PlayerCombatComp->LightAttack();
 	}
 }
 
-void APlayerCharacter::LightSkillAttack()
+void APlayerCharacter::HeavyAttackInput()
 {
-	if (PlayerCombatComp == nullptr)return;
-	if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied)
+	if (PlayerCombatComp)
 	{
-		SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-		switch (PlayerCombatComp->GetWeaponStatus())
-		{
-		case EPlayerWeaponStatus::EPWS_Unarmed:
-			if (GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Green, TEXT("Light Skill Attack Unarmed"));
-			}
-			if (PlayerCombatComp->GetLightSkillUnarmedMontage() != nullptr)
-			{
-				UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-				if (PlayerCombatComp->GetLightSkillUnarmedMontage() && AnimInstance)
-				{
-					AnimInstance->Montage_Play(PlayerCombatComp->GetLightSkillUnarmedMontage());
-				}
-			}
-
-			break;
-		case EPlayerWeaponStatus::EPWS_ArmedMelee:
-			break;
-		case EPlayerWeaponStatus::EPWS_ArmedRanged:
-			break;
-		}
+		PlayerCombatComp->HeavyAttack();
 	}
 }
 
-void APlayerCharacter::HeavySkillAttack()
+void APlayerCharacter::LightSkillAttackInput()
 {
-	if (PlayerCombatComp == nullptr)return;
-	if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied)
+	if (PlayerCombatComp)
 	{
-		SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-		switch (PlayerCombatComp->GetWeaponStatus())
-		{
-		case EPlayerWeaponStatus::EPWS_Unarmed:
-			if (GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Green, TEXT("Heavy Skill Attack Unarmed"));
-			}
-			if (PlayerCombatComp->GetHeavySkillUnarmedMontage() != nullptr)
-			{
-				UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-				if (PlayerCombatComp->GetHeavySkillUnarmedMontage() && AnimInstance)
-				{
-					AnimInstance->Montage_Play(PlayerCombatComp->GetHeavySkillUnarmedMontage());
-				}
-			}
+		PlayerCombatComp->LightSkillAttack();
+	}
+}
 
-			break;
-		case EPlayerWeaponStatus::EPWS_ArmedMelee:
-			break;
-		case EPlayerWeaponStatus::EPWS_ArmedRanged:
-			break;
-		}
+void APlayerCharacter::HeavySkillAttackInput()
+{
+	if (PlayerCombatComp)
+	{
+		PlayerCombatComp->HeavySkillAttack();
 	}
 }
 

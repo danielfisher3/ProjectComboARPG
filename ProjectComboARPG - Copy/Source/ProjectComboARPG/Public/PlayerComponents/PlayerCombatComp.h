@@ -9,6 +9,8 @@
 
 //FWD Declaration
 class UAnimMontage;
+class APlayerCharacter;
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTCOMBOARPG_API UPlayerCombatComp : public UActorComponent
@@ -23,6 +25,18 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	/*<Unreal Internal / Constructors>*/
 
+	/*Attacking*/
+	void LightAttack();
+
+	void HeavyAttack();
+
+	void HeavySkillAttack();
+
+	void LightSkillAttack();
+
+
+	/*<Attacking>*/
+
 protected:
 	/*Unreal Internal / Constructors*/
 	virtual void BeginPlay() override;
@@ -30,6 +44,10 @@ protected:
 
 	
 private:
+	/*Player Ref*/
+	UPROPERTY(VisibleAnywhere)
+	APlayerCharacter* PLChar;
+	/*<Player Ref>*/
 
 	/*PlayerWeaponStatus*/
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
@@ -38,25 +56,25 @@ private:
 
 	/*Attack Montages*/
 	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* LightAttackMontageUnarmed;
+	UAnimMontage* LightAttackMontageUnarmed1;
 
 	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* HeavyAttackMontageUnarmed;
+	UAnimMontage* HeavyAttackMontageUnarmed1;
 
 	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* LightSkillAttackMontageUnarmed;
+	UAnimMontage* LightSkillAttackMontageUnarmed1;
 
 	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* HeavySkillAttackMontageUnarmed;
+	UAnimMontage* HeavySkillAttackMontageUnarmed1;
 	/*<Attack Montages>*/
 
 		
 public:
 	/*Getters and Setters*/
 	FORCEINLINE EPlayerWeaponStatus GetWeaponStatus()const { return WeaponStatus; }
-	FORCEINLINE UAnimMontage* GetLightAttackUnarmedMontage()const { return LightAttackMontageUnarmed; }
-	FORCEINLINE UAnimMontage* GetHeavyAttackUnarmedMontage()const { return HeavyAttackMontageUnarmed; }
-	FORCEINLINE UAnimMontage* GetLightSkillUnarmedMontage()const { return LightSkillAttackMontageUnarmed; }
-	FORCEINLINE UAnimMontage* GetHeavySkillUnarmedMontage()const { return HeavySkillAttackMontageUnarmed; }
+	FORCEINLINE UAnimMontage* GetLightAttackUnarmedMontage()const { return LightAttackMontageUnarmed1; }
+	FORCEINLINE UAnimMontage* GetHeavyAttackUnarmedMontage()const { return HeavyAttackMontageUnarmed1; }
+	FORCEINLINE UAnimMontage* GetLightSkillUnarmedMontage()const { return LightSkillAttackMontageUnarmed1; }
+	FORCEINLINE UAnimMontage* GetHeavySkillUnarmedMontage()const { return HeavySkillAttackMontageUnarmed1; }
 	/*<Getters and Setters>*/
 };

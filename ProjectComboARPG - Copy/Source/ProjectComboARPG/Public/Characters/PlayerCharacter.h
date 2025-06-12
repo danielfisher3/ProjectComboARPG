@@ -77,13 +77,13 @@ public:
 
 	void Dodge();
 
-	void LightAttack();
+	void LightAttackInput();
 
-	void HeavyAttack();
+	void HeavyAttackInput();
 
-	void LightSkillAttack();
+	void LightSkillAttackInput();
 
-	void HeavySkillAttack();
+	void HeavySkillAttackInput();
 	/*<Input action mappings>*/
 
 	/*Player Combat*/
@@ -139,11 +139,8 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Dodging", meta = (AllowPrivateAccess = "true"))
 	bool bCanDodge;
 
-	/**Dodgeforce is temp until animation is created*/
-	UPROPERTY(EditAnywhere, Category = "Dodging", meta = (AllowPrivateAccess = "true"))
-	float DodgeForce;
 
-	/**This is in place and filled with a temp until animation is created*/
+	/**Dodge Montage*/
 	UPROPERTY(EditAnywhere, Category = "Dodging", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DodgeMontage;
 	/*<Dodging>*/
