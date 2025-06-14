@@ -47,6 +47,8 @@ private:
 	/*Player Ref*/
 	UPROPERTY(VisibleAnywhere)
 	APlayerCharacter* PLChar;
+
+	UAnimInstance* PLAnimInstance;
 	/*<Player Ref>*/
 
 	/*PlayerWeaponStatus*/
@@ -59,7 +61,25 @@ private:
 	UAnimMontage* LightAttackMontageUnarmed1;
 
 	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* LightAttackMontageUnarmed2;
+
+	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* LightAttackMontageUnarmed3;
+
+	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* LightAttackMontageUnarmed4;
+
+	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* HeavyAttackMontageUnarmed1;
+
+	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* HeavyAttackMontageUnarmed2;
+
+	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* HeavyAttackMontageUnarmed3;
+
+	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* HeavyAttackMontageUnarmed4;
 
 	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* LightSkillAttackMontageUnarmed1;
