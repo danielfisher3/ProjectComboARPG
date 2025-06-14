@@ -4,12 +4,14 @@
 #include "AnimInstances/PlayerAnimInstance.h"
 #include "Characters/PlayerCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "PlayerComponents/PlayerCombatComp.h"
 
 UPlayerAnimInstance::UPlayerAnimInstance() :
 	/*Variable Initialization*/
 	Speed(0.f),
 	bIsInAir(false),
-	bIsAccelerating(false)
+	bIsAccelerating(false),
+	bIsBlocking(false)
 	/*<Variable Initialization>*/
 {
 }
@@ -42,6 +44,10 @@ void UPlayerAnimInstance::UpdateAnimProperties(float DeltaTime)
 		else 
 		{
 			bIsAccelerating = false;
+		}
+		if (PLChar->GetPlayerCombatComp()) 
+		{
+			bIsBlocking = PLChar->GetPlayerCombatComp()->bBlocking ? true : false;
 		}
 	}
 }

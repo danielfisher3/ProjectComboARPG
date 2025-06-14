@@ -82,6 +82,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(HeavyAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HeavyAttackInput);
 		EnhancedInputComponent->BindAction(LightSkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::LightSkillAttackInput);
 		EnhancedInputComponent->BindAction(HeavySkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::HeavySkillAttackInput);
+		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Triggered, this, &APlayerCharacter::BlockInputAction);
+		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Completed, this, &APlayerCharacter::BlockReleaseAction);
 		
 	}
 
@@ -222,6 +224,22 @@ void APlayerCharacter::HeavySkillAttackInput()
 	if (PlayerCombatComp)
 	{
 		PlayerCombatComp->HeavySkillAttack();
+	}
+}
+
+void APlayerCharacter::BlockInputAction()
+{
+	if (PlayerCombatComp) 
+	{
+		PlayerCombatComp->Block();
+	}
+}
+
+void APlayerCharacter::BlockReleaseAction()
+{
+	if (PlayerCombatComp) 
+	{
+		PlayerCombatComp->bBlocking = false;
 	}
 }
 

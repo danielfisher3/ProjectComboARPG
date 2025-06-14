@@ -34,8 +34,14 @@ public:
 
 	void LightSkillAttack();
 
-
 	/*<Attacking>*/
+
+	/*Block*/
+	void Block();
+
+	UPROPERTY(VisibleAnywhere)
+	bool bBlocking;
+	/*<Block>*/
 
 protected:
 	/*Unreal Internal / Constructors*/

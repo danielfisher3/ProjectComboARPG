@@ -9,7 +9,8 @@
 UPlayerCombatComp::UPlayerCombatComp():
 	/*Variable Initialization*/
 	WeaponStatus(EPlayerWeaponStatus::EPWS_Unarmed),
-	ComboCount(0)
+	ComboCount(0),
+	bBlocking(false)
 {
 	
 	PrimaryComponentTick.bCanEverTick = true;
@@ -208,6 +209,11 @@ void UPlayerCombatComp::HeavySkillAttack()
 	case EPlayerWeaponStatus::EPWS_Unarmed:
 		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied)
 		{
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Heavy Skill Attack"));
+
+			}
 			UAnimInstance* AnimInstance = PLChar->GetMesh()->GetAnimInstance();
 			if (AnimInstance && HeavySkillAttackMontageUnarmed1)
 			{
@@ -233,6 +239,11 @@ void UPlayerCombatComp::LightSkillAttack()
 	case EPlayerWeaponStatus::EPWS_Unarmed:
 		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied)
 		{
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Light Skill Attack"));
+
+			}
 			UAnimInstance* AnimInstance = PLChar->GetMesh()->GetAnimInstance();
 			if (AnimInstance && LightSkillAttackMontageUnarmed1)
 			{
@@ -248,6 +259,15 @@ void UPlayerCombatComp::LightSkillAttack()
 		break;
 	default:
 		break;
+	}
+}
+
+void UPlayerCombatComp::Block()
+{
+	bBlocking = true;
+	if (PLChar) 
+	{
+		PLChar->SetPlayerStatus(EPlayerStatus::EPS_BlockParry);
 	}
 }
 

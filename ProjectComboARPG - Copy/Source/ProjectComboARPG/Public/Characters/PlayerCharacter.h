@@ -63,6 +63,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* HeavySkillAttackAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* BlockAction;
+
 	/*<Input Actions>*/
 
 
@@ -84,6 +87,10 @@ public:
 	void LightSkillAttackInput();
 
 	void HeavySkillAttackInput();
+
+	void BlockInputAction();
+
+	void BlockReleaseAction();
 	/*<Input action mappings>*/
 
 	/*Player Combat*/
@@ -155,7 +162,11 @@ public:
 	/*Getters and Setters*/
 	FORCEINLINE EPlayerStatus GetPlayerStatus()const { return PlayerStatus; }
 
+	FORCEINLINE UPlayerCombatComp* GetPlayerCombatComp()const { return PlayerCombatComp; }
+
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerStatus(EPlayerStatus NewStatus) { PlayerStatus = NewStatus; }
+
+
 	
 };
