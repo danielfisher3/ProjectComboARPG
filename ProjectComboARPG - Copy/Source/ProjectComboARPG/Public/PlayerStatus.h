@@ -8,5 +8,6 @@ enum class EPlayerStatus : uint8
 	EPS_Dodging UMETA(DisplayName = "Dodging"),
 	EPS_Attacking UMETA(DisplayName = "Attacking"),
 	EPS_BlockParry UMETA(DisplayName = "BlockOrParry"),
+	EPS_Crouching UMETA(DisplayName = "Crouching"),
 	EPS_MAX UMETA(DisplayName = "DefaultMAX")
 };

@@ -10,6 +10,7 @@
 #include "Camera/CameraComponent.h"
 #include "PlayerComponents/PlayerCombatComp.h"
 #include "PlayerComponents/PlayerStatsComponent.h"
+#include "Components/CapsuleComponent.h"
 
 
 
@@ -18,7 +19,9 @@ APlayerCharacter::APlayerCharacter():
 	BaseLookUpRate(45.f),
 	BaseTurnRate(45.f),
 	BaseMovementSpeed(600.f),
-	PlayerStatus(EPlayerStatus::EPS_Unoccupied)
+	BaseCrouchSpeed(300.f),
+	PlayerStatus(EPlayerStatus::EPS_Unoccupied),
+	bCrouching(false)
 	
 {
  	
@@ -59,11 +62,14 @@ void APlayerCharacter::BeginPlay()
 
 }
 
+
+
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	PlayerStatusManager();
+	InterpCapsuleHH(DeltaTime);
 	
 }
 
@@ -84,6 +90,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(HeavySkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::HeavySkillAttackInput);
 		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Triggered, this, &APlayerCharacter::BlockInputAction);
 		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Completed, this, &APlayerCharacter::BlockReleaseAction);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::CrouchInputAction);
 		
 	}
 
@@ -106,7 +113,7 @@ void APlayerCharacter::InitializeEnhancedInputSubSystem()
 bool APlayerCharacter::CheckIfCanChangePlayerStatusToJumpOrDodge()
 {
 	/*Can Change to Jump or Dodge if character is not in air and is not currently in an action*/
-	if (!GetCharacterMovement()->IsFalling() && GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied) return true;
+	if (!GetCharacterMovement()->IsFalling() && GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && GetPlayerStatus() != EPlayerStatus::EPS_Crouching) return true;
 
 	return false;
 }
@@ -119,13 +126,15 @@ void APlayerCharacter::PlayerStatusManager()
 	bCanJump = CheckIfCanChangePlayerStatusToJumpOrDodge();
 	/*Checks if player is in a status where they can Dodge*/
 	bCanDodge = CheckIfCanChangePlayerStatusToJumpOrDodge();
+
+	
 }
 
 /**Move functionality for the player*/
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
 	/*Make sure player is not in the middle of another action*/
-	if (GetPlayerStatus()== EPlayerStatus::EPS_Unoccupied) 
+	if (GetPlayerStatus()== EPlayerStatus::EPS_Unoccupied && GetPlayerStatus() != EPlayerStatus::EPS_Crouching)
 	{
 		/*Ref for For Input Value*/
 		const FVector2D MovementVector = Value.Get<FVector2D>();
@@ -166,7 +175,7 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 void APlayerCharacter::Jump()
 {
 	/*Make sure we are able to jump*/
-	if (bCanJump) 
+	if (bCanJump)
 	{
 		/*Utilize built in function from character internal base class*/
 		ACharacter::Jump();
@@ -229,7 +238,7 @@ void APlayerCharacter::HeavySkillAttackInput()
 
 void APlayerCharacter::BlockInputAction()
 {
-	if (PlayerCombatComp) 
+	if (PlayerCombatComp && GetPlayerStatus() != EPlayerStatus::EPS_Crouching)
 	{
 		PlayerCombatComp->Block();
 	}
@@ -237,11 +246,41 @@ void APlayerCharacter::BlockInputAction()
 
 void APlayerCharacter::BlockReleaseAction()
 {
-	if (PlayerCombatComp) 
+	if (PlayerCombatComp && GetPlayerStatus() != EPlayerStatus::EPS_Crouching)
 	{
 		PlayerCombatComp->bBlocking = false;
 	}
 }
+
+void APlayerCharacter::CrouchInputAction()
+{
+	bCrouching = !bCrouching;
+}
+
+void APlayerCharacter::InterpCapsuleHH(float DeltaTime)
+{
+	float TargetCapsuleHH{};
+	if (bCrouching) 
+	{
+		TargetCapsuleHH = CrouchingCapsuleHH;
+	}
+	else 
+	{
+		TargetCapsuleHH = StandingCapsuleHH;
+	}
+
+	const float InterpHH{ FMath::FInterpTo(GetCapsuleComponent()->GetScaledCapsuleHalfHeight(),
+		TargetCapsuleHH,DeltaTime,20.f) };
+
+	//neg value if crouching, positive if standing
+	const float DeltaCapsuleHH{ InterpHH - GetCapsuleComponent()->GetScaledCapsuleHalfHeight() };
+	const FVector MeshOffset{ 0.f,0.f,-DeltaCapsuleHH };
+
+	GetMesh()->AddLocalOffset(MeshOffset);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(InterpHH);
+}
+
+
 
 
 

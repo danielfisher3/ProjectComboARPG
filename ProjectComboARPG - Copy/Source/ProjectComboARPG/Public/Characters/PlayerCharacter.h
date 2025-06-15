@@ -66,6 +66,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* BlockAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* CrouchAction;
+
 	/*<Input Actions>*/
 
 
@@ -91,6 +94,10 @@ public:
 	void BlockInputAction();
 
 	void BlockReleaseAction();
+
+	void CrouchInputAction();
+
+	void CrouchReleaseAction();
 	/*<Input action mappings>*/
 
 	/*Player Combat*/
@@ -110,6 +117,7 @@ protected:
 	virtual void BeginPlay() override;
 	/*<Unreal Internal / Constructors>*/
 	
+	void InterpCapsuleHH(float DeltaTime);
 
 private:
 
@@ -135,6 +143,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement Variables", meta = (AllowPrivateAccess = "true"))
 	float BaseMovementSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement Variables", meta = (AllowPrivateAccess = "true"))
+	float BaseCrouchSpeed;
 	/*<Movement/ Looking>*/
 
 	/*Jumping*/
@@ -152,6 +163,19 @@ private:
 	UAnimMontage* DodgeMontage;
 	/*<Dodging>*/
 
+
+	/*Crouching*/
+	UPROPERTY(VisibleAnywhere, Category = "Crouch")
+	bool bCrouching;
+
+	UPROPERTY(EditAnywhere, Category = "Crouch", meta = (AllowPrivateAccess = "true"))
+	float StandingCapsuleHH = 88.f;
+
+	UPROPERTY(EditAnywhere, Category = "Crouch", meta = (AllowPrivateAccess = "true"))
+	float CrouchingCapsuleHH = 44.f;
+	
+	/*<Crouching>*/
+
 	/*Private FUNCTIONS*/
 
 	bool CheckIfCanChangePlayerStatusToJumpOrDodge();
@@ -163,6 +187,8 @@ public:
 	FORCEINLINE EPlayerStatus GetPlayerStatus()const { return PlayerStatus; }
 
 	FORCEINLINE UPlayerCombatComp* GetPlayerCombatComp()const { return PlayerCombatComp; }
+
+	FORCEINLINE bool GetCrouching()const { return bCrouching; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerStatus(EPlayerStatus NewStatus) { PlayerStatus = NewStatus; }

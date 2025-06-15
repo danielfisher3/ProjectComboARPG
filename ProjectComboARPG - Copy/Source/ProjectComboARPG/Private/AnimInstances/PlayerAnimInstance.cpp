@@ -45,10 +45,13 @@ void UPlayerAnimInstance::UpdateAnimProperties(float DeltaTime)
 		{
 			bIsAccelerating = false;
 		}
+
 		if (PLChar->GetPlayerCombatComp()) 
 		{
 			bIsBlocking = PLChar->GetPlayerCombatComp()->bBlocking ? true : false;
 		}
+
+		bIsCrouching = PLChar->GetCrouching() ? true : false;
 	}
 }
 
