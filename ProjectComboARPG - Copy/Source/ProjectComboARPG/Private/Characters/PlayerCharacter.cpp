@@ -10,6 +10,7 @@
 #include "Camera/CameraComponent.h"
 #include "PlayerComponents/PlayerCombatComp.h"
 #include "PlayerComponents/PlayerStatsComponent.h"
+#include "PlayerComponents/VaultComp.h"
 #include "Components/CapsuleComponent.h"
 
 
@@ -49,6 +50,7 @@ APlayerCharacter::APlayerCharacter():
 	/*Create Actor Components*/
 	PlayerCombatComp = CreateDefaultSubobject<UPlayerCombatComp>(TEXT("PlayerCombatComp"));
 	PlayerStatsComp = CreateDefaultSubobject<UPlayerStatsComponent>(TEXT("PlayerStatsComp"));
+	VaultComponent = CreateDefaultSubobject<UVaultComp>(TEXT("Vault Comp"));
 	/*<Create Components and Set Controller Values>*/
 }
 

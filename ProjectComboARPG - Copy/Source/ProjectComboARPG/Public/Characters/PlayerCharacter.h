@@ -15,6 +15,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UPlayerCombatComp;
 class UPlayerStatsComponent;
+class UVaultComp;
 
 
 
@@ -100,16 +101,18 @@ public:
 	void CrouchReleaseAction();
 	/*<Input action mappings>*/
 
-	/*Player Combat*/
+	
 	/**Player Combat Comp*/
 	UPROPERTY(EditAnywhere, Category = "Player Combat")
 	UPlayerCombatComp* PlayerCombatComp;
-	/*<PlayerCombat>*/
-
-
-	/*Player Stats*/
+	
+	/**Player Stats*/
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	UPlayerStatsComponent* PlayerStatsComp;
+
+	/**Vault Comp*/
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	UVaultComp* VaultComponent;
 
 protected:
 	
