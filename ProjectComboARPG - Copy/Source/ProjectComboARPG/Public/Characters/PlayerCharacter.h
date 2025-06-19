@@ -16,6 +16,7 @@ class UCameraComponent;
 class UPlayerCombatComp;
 class UPlayerStatsComponent;
 class UVaultComp;
+class UMotionWarpingComponent;
 
 
 
@@ -70,6 +71,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* CrouchAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* VaultAction;
+
 	/*<Input Actions>*/
 
 
@@ -98,7 +102,7 @@ public:
 
 	void CrouchInputAction();
 
-	void CrouchReleaseAction();
+	void VaultInputAction();
 	/*<Input action mappings>*/
 
 	
@@ -113,6 +117,8 @@ public:
 	/**Vault Comp*/
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	UVaultComp* VaultComponent;
+
+	UMotionWarpingComponent* MotionWarpingComp;
 
 protected:
 	
@@ -192,6 +198,8 @@ public:
 	FORCEINLINE UPlayerCombatComp* GetPlayerCombatComp()const { return PlayerCombatComp; }
 
 	FORCEINLINE bool GetCrouching()const { return bCrouching; }
+
+	FORCEINLINE UMotionWarpingComponent* GetMotionWarpingComp()const { return MotionWarpingComp; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerStatus(EPlayerStatus NewStatus) { PlayerStatus = NewStatus; }

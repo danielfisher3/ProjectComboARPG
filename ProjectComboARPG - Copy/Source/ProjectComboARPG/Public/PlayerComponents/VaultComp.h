@@ -28,11 +28,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Vaulting")
 	float DistanceForLanding;
 
-	
+	UPROPERTY(VisibleAnywhere, Category = "Vaulting")
+	bool bCanVault;
+
 	void Vault();
 
 	UFUNCTION(BlueprintCallable)
 	void ResetForRegMovement();
+
 
 
 protected:

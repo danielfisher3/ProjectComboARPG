@@ -12,6 +12,7 @@
 #include "PlayerComponents/PlayerStatsComponent.h"
 #include "PlayerComponents/VaultComp.h"
 #include "Components/CapsuleComponent.h"
+#include "MotionWarpingComponent.h"
 
 
 
@@ -51,6 +52,7 @@ APlayerCharacter::APlayerCharacter():
 	PlayerCombatComp = CreateDefaultSubobject<UPlayerCombatComp>(TEXT("PlayerCombatComp"));
 	PlayerStatsComp = CreateDefaultSubobject<UPlayerStatsComponent>(TEXT("PlayerStatsComp"));
 	VaultComponent = CreateDefaultSubobject<UVaultComp>(TEXT("Vault Comp"));
+	MotionWarpingComp = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("Motion Warping Comp"));
 	/*<Create Components and Set Controller Values>*/
 }
 
@@ -93,6 +95,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Triggered, this, &APlayerCharacter::BlockInputAction);
 		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Completed, this, &APlayerCharacter::BlockReleaseAction);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::CrouchInputAction);
+		EnhancedInputComponent->BindAction(VaultAction, ETriggerEvent::Triggered, this, &APlayerCharacter::VaultInputAction);
 		
 	}
 
@@ -257,6 +260,14 @@ void APlayerCharacter::BlockReleaseAction()
 void APlayerCharacter::CrouchInputAction()
 {
 	bCrouching = !bCrouching;
+}
+
+void APlayerCharacter::VaultInputAction()
+{
+	if (VaultComponent) 
+	{
+		VaultComponent->Vault();
+	}
 }
 
 void APlayerCharacter::InterpCapsuleHH(float DeltaTime)
