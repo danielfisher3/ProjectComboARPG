@@ -141,7 +141,10 @@ private:
 	bool bSaveAttack;
 
 	UPROPERTY(VisibleAnywhere,  meta = (AllowPrivateAccess = "true"))
-	int32 AttackIndex;
+	int32 LightAttackIndex;
+
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	int32 HeavyAttackIndex;
 
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	bool bHasAttacked;

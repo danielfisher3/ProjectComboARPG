@@ -13,7 +13,8 @@ UPlayerCombatComp::UPlayerCombatComp():
 	WeaponStatus(EPlayerWeaponStatus::EPWS_Unarmed),
 	bIsAttacking(false),
 	bSaveAttack(false),
-	AttackIndex(0),
+	LightAttackIndex(0),
+	HeavyAttackIndex(0),
 	bHasAttacked(false),
 	LightAttackDamage(0.f),
 	HeavyAttackDamage(0.f),
@@ -60,70 +61,76 @@ void UPlayerCombatComp::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 	if (PLChar) 
 	{
-		bCanAttack = PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && !PLChar->bIsCrouched ? true : false;
+		bCanAttack = PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Attacking && !PLChar->bIsCrouched ? true : false;
 	}
 }
 
 void UPlayerCombatComp::LightAttack()
 {
-	if (bIsAttacking)
+	if (PLChar->GetSkillInput() == false)
 	{
-		bSaveAttack = true;
-	}
-	else
-	{
-		bIsAttacking = true;
-
-		switch (AttackIndex)
+		if (bIsAttacking)
 		{
-		case 0:
-			LightAttackOne();
-			break;
+			bSaveAttack = true;
+		}
+		else
+		{
+			bIsAttacking = true;
 
-		case 1:
-			LightAttackTwo();
-			break;
+			switch (LightAttackIndex)
+			{
+			case 0:
+				LightAttackOne();
+				break;
 
-		case 2:
-			LightAttackThree();
-			break;
+			case 1:
+				LightAttackTwo();
+				break;
 
-		case 3:
-			LightAttackFour();
-			break;
+			case 2:
+				LightAttackThree();
+				break;
 
+			case 3:
+				LightAttackFour();
+				break;
+
+			}
 		}
 	}
 }
 
 void UPlayerCombatComp::StrongAttack()
 {
-	if (bIsAttacking)
+	if (PLChar->GetSkillInput() == false) 
 	{
-		bSaveAttack = true;
-	}
-	else
-	{
-		bIsAttacking = true;
-
-		switch (AttackIndex)
+		if (bIsAttacking)
 		{
-		case 0:
-			StrongAttackOne();
-			break;
+			bSaveAttack = true;
+		}
+		else
+		{
+			bIsAttacking = true;
 
-		case 1:
-			StrongAttackTwo();
-			break;
+			switch (HeavyAttackIndex)
+			{
+			case 0:
+				StrongAttackOne();
+				break;
 
-		case 2:
-			StrongAttackThree();
-			break;
+			case 1:
+				StrongAttackTwo();
+				break;
 
-		case 3:
-			StrongAttackFour();
-			break;
+			case 2:
+				StrongAttackThree();
+				break;
 
+			case 3:
+				StrongAttackFour();
+				break;
+
+			}
 		}
 	}
 }
@@ -137,7 +144,7 @@ void UPlayerCombatComp::LightAttackOne()
 		{
 			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed1);
 			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-			AttackIndex = 1;
+			LightAttackIndex = 1;
 			bHasAttacked = false;
 		}
 	}
@@ -152,7 +159,7 @@ void UPlayerCombatComp::LightAttackTwo()
 		{
 			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed2);
 			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-			AttackIndex = 2;
+			LightAttackIndex = 2;
 			bHasAttacked = false;
 		}
 	}
@@ -167,7 +174,7 @@ void UPlayerCombatComp::LightAttackThree()
 		{
 			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed3);
 			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-			AttackIndex = 3;
+			LightAttackIndex = 3;
 			bHasAttacked = false;
 		}
 	}
@@ -182,7 +189,7 @@ void UPlayerCombatComp::LightAttackFour()
 		{
 			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed4);
 			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-			AttackIndex = 0;
+			LightAttackIndex = 0;
 			bHasAttacked = false;
 		}
 	}
@@ -197,7 +204,7 @@ void UPlayerCombatComp::StrongAttackOne()
 		{
 			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed1);
 			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-			AttackIndex = 1;
+			HeavyAttackIndex = 1;
 			bHasAttacked = false;
 		}
 	}
@@ -212,7 +219,7 @@ void UPlayerCombatComp::StrongAttackTwo()
 		{
 			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed2);
 			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-			AttackIndex = 2;
+			HeavyAttackIndex = 2;
 			bHasAttacked = false;
 		}
 	}
@@ -227,7 +234,7 @@ void UPlayerCombatComp::StrongAttackThree()
 		{
 			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed3);
 			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-			AttackIndex = 3;
+			HeavyAttackIndex = 3;
 			bHasAttacked = false;
 		}
 	}
@@ -242,7 +249,7 @@ void UPlayerCombatComp::StrongAttackFour()
 		{
 			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed4);
 			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
-			AttackIndex = 0;
+			HeavyAttackIndex = 0;
 			bHasAttacked = false;
 		}
 	}
@@ -251,74 +258,82 @@ void UPlayerCombatComp::StrongAttackFour()
 
 void UPlayerCombatComp::LightAttackCombo()
 {
-	if (bSaveAttack)
+	if (PLChar->GetSkillInput() == false)
 	{
-		bSaveAttack = false;
-
-		switch (AttackIndex)
+		if (bSaveAttack)
 		{
-		case 0:
-			LightAttackOne();
-			break;
+			bSaveAttack = false;
 
-		case 1:
-			LightAttackTwo();
-			break;
+			switch (LightAttackIndex)
+			{
+			case 0:
+				LightAttackOne();
+				break;
 
-		case 2:
-			LightAttackThree();
-			break;
+			case 1:
+				LightAttackTwo();
+				break;
 
-		case 3:
-			LightAttackFour();
-			break;
+			case 2:
+				LightAttackThree();
+				break;
+
+			case 3:
+				LightAttackFour();
+				break;
+
+			}
 
 		}
-
-	}
-	else
-	{
-		StopCombo();
+		else
+		{
+			StopCombo();
+		}
 	}
 }
 
 void UPlayerCombatComp::StrongAttackCombo()
 {
-	if (bSaveAttack)
+	if (PLChar->GetSkillInput() == false)
 	{
-		bSaveAttack = false;
-
-		switch (AttackIndex)
+		if (bSaveAttack)
 		{
-		case 0:
-			StrongAttackOne();
-			break;
+			bSaveAttack = false;
 
-		case 1:
-			StrongAttackTwo();
-			break;
+			switch (HeavyAttackIndex)
+			{
+			case 0:
+				StrongAttackOne();
+				break;
 
-		case 2:
-			StrongAttackThree();
-			break;
+			case 1:
+				StrongAttackTwo();
+				break;
 
-		case 3:
-			StrongAttackFour();
-			break;
+			case 2:
+				StrongAttackThree();
+				break;
+
+			case 3:
+				StrongAttackFour();
+				break;
+
+			}
 
 		}
+		else
+		{
+			StopCombo();
+		}
+	}
 
-	}
-	else
-	{
-		StopCombo();
-	}
 }
 
 void UPlayerCombatComp::StopCombo()
 {
 	bIsAttacking = false;
-	AttackIndex = 0;
+	LightAttackIndex = 0;
+	HeavyAttackIndex = 0;
 	PLChar->SetPlayerStatus(EPlayerStatus::EPS_Unoccupied);
 	
 }

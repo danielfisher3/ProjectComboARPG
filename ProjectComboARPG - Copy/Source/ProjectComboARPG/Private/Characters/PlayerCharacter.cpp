@@ -92,7 +92,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LightAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LightAttackInput);
 		EnhancedInputComponent->BindAction(HeavyAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HeavyAttackInput);
 		EnhancedInputComponent->BindAction(LightSkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::LightSkillAttackInput);
-		EnhancedInputComponent->BindAction(HeavySkillAttackAction, ETriggerEvent::Started, this, &APlayerCharacter::HeavySkillAttackInput);
+		EnhancedInputComponent->BindAction(HeavySkillAttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HeavySkillAttackInput);
 		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Triggered, this, &APlayerCharacter::BlockInputAction);
 		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Completed, this, &APlayerCharacter::BlockReleaseAction);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::CrouchInputAction);
@@ -216,7 +216,7 @@ void APlayerCharacter::LightAttackInput()
 {
 	if (PlayerCombatComp) 
 	{
-		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && !bCrouching) 
+		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || GetPlayerStatus() == EPlayerStatus::EPS_Attacking && !bCrouching)
 		{
 			if (PlayerCombatComp->bCanAttack) 
 			{
@@ -230,7 +230,7 @@ void APlayerCharacter::HeavyAttackInput()
 {
 	if (PlayerCombatComp)
 	{
-		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && !bCrouching)
+		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || GetPlayerStatus() == EPlayerStatus::EPS_Attacking && !bCrouching)
 		{
 			if (PlayerCombatComp->bCanAttack)
 			{
