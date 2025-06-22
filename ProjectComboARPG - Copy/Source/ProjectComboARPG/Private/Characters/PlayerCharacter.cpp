@@ -74,6 +74,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	PlayerStatusManager();
 	InterpCapsuleHH(DeltaTime);
+
 	
 }
 
@@ -118,7 +119,7 @@ void APlayerCharacter::InitializeEnhancedInputSubSystem()
 bool APlayerCharacter::CheckIfCanChangePlayerStatusToJumpOrDodge()
 {
 	/*Can Change to Jump or Dodge if character is not in air and is not currently in an action*/
-	if (!GetCharacterMovement()->IsFalling() && GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && GetPlayerStatus() != EPlayerStatus::EPS_Crouching) return true;
+	if (!GetCharacterMovement()->IsFalling() && GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && !bCrouching) return true;
 
 	return false;
 }
@@ -243,7 +244,7 @@ void APlayerCharacter::HeavySkillAttackInput()
 
 void APlayerCharacter::BlockInputAction()
 {
-	if (PlayerCombatComp && GetPlayerStatus() != EPlayerStatus::EPS_Crouching)
+	if (PlayerCombatComp && GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && !bCrouching)
 	{
 		PlayerCombatComp->Block();
 	}
@@ -276,10 +277,12 @@ void APlayerCharacter::InterpCapsuleHH(float DeltaTime)
 	if (bCrouching) 
 	{
 		TargetCapsuleHH = CrouchingCapsuleHH;
+		GetCharacterMovement()->MaxWalkSpeed = BaseCrouchSpeed;
 	}
 	else 
 	{
 		TargetCapsuleHH = StandingCapsuleHH;
+		GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
 	}
 
 	const float InterpHH{ FMath::FInterpTo(GetCapsuleComponent()->GetScaledCapsuleHalfHeight(),
