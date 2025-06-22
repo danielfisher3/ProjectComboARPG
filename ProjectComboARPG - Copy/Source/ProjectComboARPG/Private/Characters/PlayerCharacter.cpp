@@ -18,8 +18,8 @@
 
 APlayerCharacter::APlayerCharacter():
 	/*Variable Initialization*/
-	BaseLookUpRate(90.f),
-	BaseTurnRate(90.f),
+	BaseLookUpRate(100.f),
+	BaseTurnRate(100.f),
 	BaseMovementSpeed(600.f),
 	BaseCrouchSpeed(300.f),
 	PlayerStatus(EPlayerStatus::EPS_Unoccupied),
@@ -216,7 +216,13 @@ void APlayerCharacter::LightAttackInput()
 {
 	if (PlayerCombatComp) 
 	{
-		PlayerCombatComp->LightAttack();
+		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && !bCrouching) 
+		{
+			if (PlayerCombatComp->bCanAttack) 
+			{
+				PlayerCombatComp->LightAttack();
+			}
+		}
 	}
 }
 
@@ -224,7 +230,13 @@ void APlayerCharacter::HeavyAttackInput()
 {
 	if (PlayerCombatComp)
 	{
-		PlayerCombatComp->HeavyAttack();
+		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && !bCrouching)
+		{
+			if (PlayerCombatComp->bCanAttack)
+			{
+				PlayerCombatComp->StrongAttack();
+			}
+		}
 	}
 }
 

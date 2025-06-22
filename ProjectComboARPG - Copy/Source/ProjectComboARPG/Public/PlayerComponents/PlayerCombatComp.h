@@ -28,8 +28,41 @@ public:
 	/*Attacking*/
 	void LightAttack();
 
-	void HeavyAttack();
+	void StrongAttack();
 
+	UFUNCTION(BlueprintCallable)
+	void LightAttackCombo();
+
+	UFUNCTION(BlueprintCallable)
+	void StrongAttackCombo();
+
+	UFUNCTION(BlueprintCallable)
+	void StopCombo();
+
+	UFUNCTION()
+	void HandleOnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload);
+
+	UPROPERTY(VisibleAnywhere)
+	bool bCanAttack;
+
+	FHitResult MWHit;
+
+	FHitResult LightAttackOneHit;
+	FHitResult LightAttackTwoHit;
+	FHitResult LightAttackThreeHit;
+	FHitResult LightAttackFourHit;
+
+	FHitResult StrongAttackOneHit;
+	FHitResult StrongAttackTwoHit;
+	FHitResult StrongAttackThreeHit;
+	FHitResult StrongAttackFourHit;
+
+	UPROPERTY(EditAnywhere, Category = Damage)
+	float LightAttackDamage;
+
+	UPROPERTY(EditAnywhere, Category = Damage)
+	float HeavyAttackDamage;
+	
 	void HeavySkillAttack();
 
 	void LightSkillAttack();
@@ -47,20 +80,6 @@ protected:
 	/*Unreal Internal / Constructors*/
 	virtual void BeginPlay() override;
 	/*<Unreal Internal / Constructors>*/
-
-	
-private:
-	/*Player Ref*/
-	UPROPERTY(VisibleAnywhere)
-	APlayerCharacter* PLChar;
-
-	UAnimInstance* PLAnimInstance;
-	/*<Player Ref>*/
-
-	/*PlayerWeaponStatus*/
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-	EPlayerWeaponStatus WeaponStatus;
-	/*<PlayerWeaponStatus>*/
 
 	/*Attack Montages*/
 	UPROPERTY(EditAnywhere, Category = "Attacks", meta = (AllowPrivateAccess = "true"))
@@ -94,20 +113,63 @@ private:
 	UAnimMontage* HeavySkillAttackMontageUnarmed1;
 	/*<Attack Montages>*/
 
-	/*Combo System*/
-	UPROPERTY(VisibleAnywhere, Category = "Combo")
-	int32 ComboCount;
+	UFUNCTION()
+	void UnarmedAttackTrace(FHitResult& HitResult, FName SocketStartName, FName SocketEndName, float SphereRadius);
 
-	UPROPERTY(EditAnywhere, Category = "Combo")
-	float ComboWindow = 0.5f;
+	UFUNCTION()
+	void AttackMotionWarp();
 
-	UPROPERTY(VisibleAnywhere, Category = "Combo")
-	bool bCanAttack = true;
+	
 
-	FTimerHandle ComboTimerHandle;
+private:
+	/*Player Ref*/
+	UPROPERTY(VisibleAnywhere)
+	APlayerCharacter* PLChar;
 
-	void ResetCombo();
-	/*Combo System*/
+	UAnimInstance* PLAnimInstance;
+	/*<Player Ref>*/
+
+	/*PlayerWeaponStatus*/
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	EPlayerWeaponStatus WeaponStatus;
+	/*<PlayerWeaponStatus>*/
+
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	bool bIsAttacking;
+
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	bool bSaveAttack;
+
+	UPROPERTY(VisibleAnywhere,  meta = (AllowPrivateAccess = "true"))
+	int32 AttackIndex;
+
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	bool bHasAttacked;
+
+	void LightAttackOne();
+
+	void LightAttackTwo();
+
+	void LightAttackThree();
+
+	void LightAttackFour();
+
+
+	void StrongAttackOne();
+
+	void StrongAttackTwo();
+
+	void StrongAttackThree();
+
+	void StrongAttackFour();
+
+	void SphereTraceForMotionWarp(FHitResult& HitResult);
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float NonTargetLockMWDistance;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float TargetLockMWDistance;
 
 
 public:

@@ -4,12 +4,21 @@
 #include "PlayerComponents/PlayerCombatComp.h"
 #include "Characters/PlayerCharacter.h"
 #include "TimerManager.h"
+#include "MotionWarpingComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 UPlayerCombatComp::UPlayerCombatComp():
 	/*Variable Initialization*/
 	WeaponStatus(EPlayerWeaponStatus::EPWS_Unarmed),
-	ComboCount(0),
+	bIsAttacking(false),
+	bSaveAttack(false),
+	AttackIndex(0),
+	bHasAttacked(false),
+	LightAttackDamage(0.f),
+	HeavyAttackDamage(0.f),
+	NonTargetLockMWDistance(200.f),
+	TargetLockMWDistance(200.f),
 	bBlocking(false)
 {
 	
@@ -29,6 +38,8 @@ void UPlayerCombatComp::BeginPlay()
 
 
 
+
+
 void UPlayerCombatComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -38,171 +49,312 @@ void UPlayerCombatComp::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 		PLChar = Cast<APlayerCharacter>(GetOwner());
 	}
 	
+	if (PLChar && PLAnimInstance == nullptr) 
+	{
+		PLAnimInstance = PLChar->GetMesh()->GetAnimInstance();
+		if (PLAnimInstance) 
+		{
+			PLAnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &UPlayerCombatComp::HandleOnMontageNotifyBegin);
+		}
+	}
 
-	
+	if (PLChar) 
+	{
+		bCanAttack = PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && !PLChar->bIsCrouched ? true : false;
+	}
 }
 
 void UPlayerCombatComp::LightAttack()
 {
-	switch (WeaponStatus)
+	if (bIsAttacking)
 	{
-	case EPlayerWeaponStatus::EPWS_Unarmed:
-		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching &&
-			!PLChar->GetSkillInput() == true)
+		bSaveAttack = true;
+	}
+	else
+	{
+		bIsAttacking = true;
+
+		switch (AttackIndex)
 		{
+		case 0:
+			LightAttackOne();
+			break;
 
+		case 1:
+			LightAttackTwo();
+			break;
 
-			ComboCount++;
+		case 2:
+			LightAttackThree();
+			break;
 
-			switch (ComboCount)
-			{
-			case 1:
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Light Attack 1"));
+		case 3:
+			LightAttackFour();
+			break;
 
-				}
-				if (PLChar->GetMesh()->GetAnimInstance() && LightAttackMontageUnarmed1) 
-				{
-					PLChar->GetMesh()->GetAnimInstance()->Montage_Play(LightAttackMontageUnarmed1);
-				}
-				break;
-
-			case 2:
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Light Attack 2"));
-
-				}
-				if (PLChar->GetMesh()->GetAnimInstance() && LightAttackMontageUnarmed2)
-				{
-					
-					PLChar->GetMesh()->GetAnimInstance()->Montage_Play(LightAttackMontageUnarmed2);
-				}
-				break;
-
-			case 3:
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Light Attack 3"));
-
-				}
-				if (PLChar->GetMesh()->GetAnimInstance() && LightAttackMontageUnarmed3)
-				{
-					PLChar->GetMesh()->GetAnimInstance()->Montage_Play(LightAttackMontageUnarmed3);
-				}
-				break;
-
-			case 4:
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Light Attack 3"));
-
-				}
-				if (PLChar->GetMesh()->GetAnimInstance() && LightAttackMontageUnarmed4)
-				{
-					PLChar->GetMesh()->GetAnimInstance()->Montage_Play(LightAttackMontageUnarmed4);
-				}
-				break;
-
-			default:
-				ResetCombo();
-				return;
-			}
-			PLChar->GetWorldTimerManager().SetTimer(ComboTimerHandle, this, &UPlayerCombatComp::ResetCombo, ComboWindow, false);
 		}
-		break;
-	case EPlayerWeaponStatus::EPWS_ArmedMelee:
-		break;
-	case EPlayerWeaponStatus::EPWS_ArmedRanged:
-		break;
-	case EPlayerWeaponStatus::EPWS_MAX:
-		break;
-	default:
-		break;
 	}
 }
 
-void UPlayerCombatComp::HeavyAttack()
+void UPlayerCombatComp::StrongAttack()
 {
-	switch (WeaponStatus)
+	if (bIsAttacking)
 	{
-	case EPlayerWeaponStatus::EPWS_Unarmed:
-		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching &&
-			!PLChar->GetSkillInput() == true)
+		bSaveAttack = true;
+	}
+	else
+	{
+		bIsAttacking = true;
+
+		switch (AttackIndex)
 		{
+		case 0:
+			StrongAttackOne();
+			break;
 
+		case 1:
+			StrongAttackTwo();
+			break;
 
-			ComboCount++;
+		case 2:
+			StrongAttackThree();
+			break;
 
-			switch (ComboCount)
-			{
-			case 1:
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Heavy Attack 1"));
+		case 3:
+			StrongAttackFour();
+			break;
 
-				}
-				if (PLChar->GetMesh()->GetAnimInstance() && HeavyAttackMontageUnarmed1)
-				{
-					PLChar->GetMesh()->GetAnimInstance()->Montage_Play(HeavyAttackMontageUnarmed1);
-				}
-
-				break;
-
-			case 2:
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Heavy Attack 2"));
-
-				}
-				if (PLChar->GetMesh()->GetAnimInstance() && HeavyAttackMontageUnarmed2)
-				{
-					PLChar->GetMesh()->GetAnimInstance()->Montage_Play(HeavyAttackMontageUnarmed2);
-				}
-				break;
-
-			case 3:
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Heavy Attack 3"));
-
-				}
-				if (PLChar->GetMesh()->GetAnimInstance() && HeavyAttackMontageUnarmed3)
-				{
-					PLChar->GetMesh()->GetAnimInstance()->Montage_Play(HeavyAttackMontageUnarmed3);
-				}
-				break;
-
-			case 4:
-				if (GEngine)
-				{
-					GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Heavy Attack 4"));
-
-				}
-				if (PLChar->GetMesh()->GetAnimInstance() && HeavyAttackMontageUnarmed4)
-				{
-					PLChar->GetMesh()->GetAnimInstance()->Montage_Play(HeavyAttackMontageUnarmed4);
-				}
-				break;
-
-			default:
-				ResetCombo();
-				return;
-			}
-			PLChar->GetWorldTimerManager().SetTimer(ComboTimerHandle, this, &UPlayerCombatComp::ResetCombo, ComboWindow, false);
 		}
-		break;
-	case EPlayerWeaponStatus::EPWS_ArmedMelee:
-		break;
-	case EPlayerWeaponStatus::EPWS_ArmedRanged:
-		break;
-	case EPlayerWeaponStatus::EPWS_MAX:
-		break;
-	default:
-		break;
 	}
 }
+
+void UPlayerCombatComp::LightAttackOne()
+{
+	if (!bHasAttacked) 
+	{
+		bHasAttacked = true;
+		if (PLAnimInstance && LightAttackMontageUnarmed1) 
+		{
+			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed1);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			AttackIndex = 1;
+			bHasAttacked = false;
+		}
+	}
+}
+
+void UPlayerCombatComp::LightAttackTwo()
+{
+	if (!bHasAttacked)
+	{
+		bHasAttacked = true;
+		if (PLAnimInstance && LightAttackMontageUnarmed2)
+		{
+			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed2);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			AttackIndex = 2;
+			bHasAttacked = false;
+		}
+	}
+}
+
+void UPlayerCombatComp::LightAttackThree()
+{
+	if (!bHasAttacked)
+	{
+		bHasAttacked = true;
+		if (PLAnimInstance && LightAttackMontageUnarmed3)
+		{
+			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed3);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			AttackIndex = 3;
+			bHasAttacked = false;
+		}
+	}
+}
+
+void UPlayerCombatComp::LightAttackFour()
+{
+	if (!bHasAttacked)
+	{
+		bHasAttacked = true;
+		if (PLAnimInstance && LightAttackMontageUnarmed4)
+		{
+			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed4);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			AttackIndex = 0;
+			bHasAttacked = false;
+		}
+	}
+}
+
+void UPlayerCombatComp::StrongAttackOne()
+{
+	if (!bHasAttacked)
+	{
+		bHasAttacked = true;
+		if (PLAnimInstance && HeavyAttackMontageUnarmed1)
+		{
+			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed1);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			AttackIndex = 1;
+			bHasAttacked = false;
+		}
+	}
+}
+
+void UPlayerCombatComp::StrongAttackTwo()
+{
+	if (!bHasAttacked)
+	{
+		bHasAttacked = true;
+		if (PLAnimInstance && HeavyAttackMontageUnarmed2)
+		{
+			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed2);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			AttackIndex = 2;
+			bHasAttacked = false;
+		}
+	}
+}
+
+void UPlayerCombatComp::StrongAttackThree()
+{
+	if (!bHasAttacked)
+	{
+		bHasAttacked = true;
+		if (PLAnimInstance && HeavyAttackMontageUnarmed3)
+		{
+			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed3);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			AttackIndex = 3;
+			bHasAttacked = false;
+		}
+	}
+}
+
+void UPlayerCombatComp::StrongAttackFour()
+{
+	if (!bHasAttacked)
+	{
+		bHasAttacked = true;
+		if (PLAnimInstance && HeavyAttackMontageUnarmed4)
+		{
+			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed4);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			AttackIndex = 0;
+			bHasAttacked = false;
+		}
+	}
+}
+
+
+void UPlayerCombatComp::LightAttackCombo()
+{
+	if (bSaveAttack)
+	{
+		bSaveAttack = false;
+
+		switch (AttackIndex)
+		{
+		case 0:
+			LightAttackOne();
+			break;
+
+		case 1:
+			LightAttackTwo();
+			break;
+
+		case 2:
+			LightAttackThree();
+			break;
+
+		case 3:
+			LightAttackFour();
+			break;
+
+		}
+
+	}
+	else
+	{
+		StopCombo();
+	}
+}
+
+void UPlayerCombatComp::StrongAttackCombo()
+{
+	if (bSaveAttack)
+	{
+		bSaveAttack = false;
+
+		switch (AttackIndex)
+		{
+		case 0:
+			StrongAttackOne();
+			break;
+
+		case 1:
+			StrongAttackTwo();
+			break;
+
+		case 2:
+			StrongAttackThree();
+			break;
+
+		case 3:
+			StrongAttackFour();
+			break;
+
+		}
+
+	}
+	else
+	{
+		StopCombo();
+	}
+}
+
+void UPlayerCombatComp::StopCombo()
+{
+	bIsAttacking = false;
+	AttackIndex = 0;
+	PLChar->SetPlayerStatus(EPlayerStatus::EPS_Unoccupied);
+	
+}
+
+void UPlayerCombatComp::HandleOnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload)
+{
+	//Fill in
+}
+
+void UPlayerCombatComp::UnarmedAttackTrace(FHitResult& HitResult, FName SocketStartName, FName SocketEndName, float SphereRadius)
+{
+	FVector SocketLocationStart = PLChar->GetMesh()->GetSocketLocation(SocketStartName);
+	FVector SocketLocationEnd = PLChar->GetMesh()->GetSocketLocation(SocketEndName);
+
+	TArray<TEnumAsByte<EObjectTypeQuery>>OverlapObjectTypes;
+	OverlapObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Visibility));
+
+	//Add Enemy Class
+
+	TArray<AActor*>ActorsToIgnore;
+	ActorsToIgnore.Add(GetOwner());
+
+	TArray<AActor*>OuActors;
+	UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), SocketLocationStart, SocketLocationEnd, SphereRadius, OverlapObjectTypes, false, ActorsToIgnore, EDrawDebugTrace::None, HitResult, true);
+}
+
+void UPlayerCombatComp::SphereTraceForMotionWarp(FHitResult& HitResult)
+{
+	//Fill in
+}
+
+void UPlayerCombatComp::AttackMotionWarp()
+{
+	//Fill in
+}
+
 
 void UPlayerCombatComp::HeavySkillAttack()
 {
@@ -221,6 +373,7 @@ void UPlayerCombatComp::HeavySkillAttack()
 			if (AnimInstance && HeavySkillAttackMontageUnarmed1)
 			{
 				AnimInstance->Montage_Play(HeavySkillAttackMontageUnarmed1);
+				PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
 			}
 		}
 		break;
@@ -252,6 +405,7 @@ void UPlayerCombatComp::LightSkillAttack()
 			if (AnimInstance && LightSkillAttackMontageUnarmed1)
 			{
 				AnimInstance->Montage_Play(LightSkillAttackMontageUnarmed1);
+				PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
 			}
 		}
 		break;
@@ -274,21 +428,6 @@ void UPlayerCombatComp::Block()
 		PLChar->SetPlayerStatus(EPlayerStatus::EPS_BlockParry);
 	}
 }
-
-void UPlayerCombatComp::ResetCombo()
-{
-	ComboCount = 0;
-	bCanAttack = true;
-	PLChar->GetWorldTimerManager().ClearTimer(ComboTimerHandle);
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(1, 2.f, FColor::Black, TEXT("Reset Combo"));
-
-	}
-
-
-}
-
 
 
 
