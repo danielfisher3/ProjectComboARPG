@@ -47,7 +47,8 @@ void UPlayerCombatComp::LightAttack()
 	switch (WeaponStatus)
 	{
 	case EPlayerWeaponStatus::EPWS_Unarmed:
-		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching)
+		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching &&
+			!PLChar->GetSkillInput() == true)
 		{
 
 
@@ -127,7 +128,8 @@ void UPlayerCombatComp::HeavyAttack()
 	switch (WeaponStatus)
 	{
 	case EPlayerWeaponStatus::EPWS_Unarmed:
-		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching)
+		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching &&
+			!PLChar->GetSkillInput() == true)
 		{
 
 
@@ -207,7 +209,8 @@ void UPlayerCombatComp::HeavySkillAttack()
 	switch (WeaponStatus)
 	{
 	case EPlayerWeaponStatus::EPWS_Unarmed:
-		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching)
+		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching &&
+			PLChar->GetSkillInput() == true)
 		{
 			if (GEngine)
 			{
@@ -237,7 +240,8 @@ void UPlayerCombatComp::LightSkillAttack()
 	switch (WeaponStatus)
 	{
 	case EPlayerWeaponStatus::EPWS_Unarmed:
-		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching)
+		if (PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied && PLChar->GetPlayerStatus() != EPlayerStatus::EPS_Crouching &&
+			PLChar->GetSkillInput() == true)
 		{
 			if (GEngine)
 			{

@@ -18,8 +18,8 @@
 
 APlayerCharacter::APlayerCharacter():
 	/*Variable Initialization*/
-	BaseLookUpRate(45.f),
-	BaseTurnRate(45.f),
+	BaseLookUpRate(90.f),
+	BaseTurnRate(90.f),
 	BaseMovementSpeed(600.f),
 	BaseCrouchSpeed(300.f),
 	PlayerStatus(EPlayerStatus::EPS_Unoccupied),
@@ -97,6 +97,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(BlockAction, ETriggerEvent::Completed, this, &APlayerCharacter::BlockReleaseAction);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::CrouchInputAction);
 		EnhancedInputComponent->BindAction(VaultAction, ETriggerEvent::Triggered, this, &APlayerCharacter::VaultInputAction);
+		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Triggered, this, &APlayerCharacter::SkillInputActionHold);
+		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Completed, this, &APlayerCharacter::SkillInputActionRelease);
 		
 	}
 
@@ -269,6 +271,16 @@ void APlayerCharacter::VaultInputAction()
 	{
 		VaultComponent->Vault();
 	}
+}
+
+void APlayerCharacter::SkillInputActionHold()
+{
+	bSkillInput = true;
+}
+
+void APlayerCharacter::SkillInputActionRelease()
+{
+	bSkillInput = false;
 }
 
 void APlayerCharacter::InterpCapsuleHH(float DeltaTime)

@@ -103,6 +103,11 @@ public:
 	void CrouchInputAction();
 
 	void VaultInputAction();
+
+	void SkillInputActionHold();
+
+	void SkillInputActionRelease();
+
 	/*<Input action mappings>*/
 
 	
@@ -185,6 +190,8 @@ private:
 	
 	/*<Crouching>*/
 
+	UPROPERTY(VisibleAnywhere, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	bool bSkillInput;
 	/*Private FUNCTIONS*/
 
 	bool CheckIfCanChangePlayerStatusToJumpOrDodge();
@@ -198,6 +205,8 @@ public:
 	FORCEINLINE UPlayerCombatComp* GetPlayerCombatComp()const { return PlayerCombatComp; }
 
 	FORCEINLINE bool GetCrouching()const { return bCrouching; }
+
+	FORCEINLINE bool GetSkillInput()const { return bSkillInput; }
 
 	FORCEINLINE UMotionWarpingComponent* GetMotionWarpingComp()const { return MotionWarpingComp; }
 
