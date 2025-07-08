@@ -6,6 +6,7 @@
 #include "TimerManager.h"
 #include "MotionWarpingComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Characters/BaseEnemy.h"
 
 
 UPlayerCombatComp::UPlayerCombatComp():
@@ -34,6 +35,19 @@ void UPlayerCombatComp::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (PLChar == nullptr)
+	{
+		PLChar = Cast<APlayerCharacter>(GetOwner());
+	}
+
+	if (PLChar && PLAnimInstance == nullptr)
+	{
+		PLAnimInstance = PLChar->GetMesh()->GetAnimInstance();
+		if (PLAnimInstance)
+		{
+			PLAnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &UPlayerCombatComp::HandleOnMontageNotifyBegin);
+		}
+	}
 	
 }
 
@@ -45,23 +59,14 @@ void UPlayerCombatComp::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (PLChar == nullptr)
-	{
-		PLChar = Cast<APlayerCharacter>(GetOwner());
-	}
 	
-	if (PLChar && PLAnimInstance == nullptr) 
-	{
-		PLAnimInstance = PLChar->GetMesh()->GetAnimInstance();
-		if (PLAnimInstance) 
-		{
-			PLAnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &UPlayerCombatComp::HandleOnMontageNotifyBegin);
-		}
-	}
 
 	if (PLChar) 
 	{
-		bCanAttack = PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Attacking && !PLChar->bIsCrouched ? true : false;
+		bCanAttack = PLChar->GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || 
+			PLChar->GetPlayerStatus() == EPlayerStatus::EPS_LightAttacking || 
+			PLChar->GetPlayerStatus() == EPlayerStatus::EPS_HeavyAttacking && 
+			!PLChar->bIsCrouched ? true : false;
 	}
 }
 
@@ -143,7 +148,7 @@ void UPlayerCombatComp::LightAttackOne()
 		if (PLAnimInstance && LightAttackMontageUnarmed1) 
 		{
 			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed1);
-			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_LightAttacking);
 			LightAttackIndex = 1;
 			bHasAttacked = false;
 		}
@@ -158,7 +163,7 @@ void UPlayerCombatComp::LightAttackTwo()
 		if (PLAnimInstance && LightAttackMontageUnarmed2)
 		{
 			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed2);
-			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_LightAttacking);
 			LightAttackIndex = 2;
 			bHasAttacked = false;
 		}
@@ -173,7 +178,7 @@ void UPlayerCombatComp::LightAttackThree()
 		if (PLAnimInstance && LightAttackMontageUnarmed3)
 		{
 			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed3);
-			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_LightAttacking);
 			LightAttackIndex = 3;
 			bHasAttacked = false;
 		}
@@ -188,7 +193,7 @@ void UPlayerCombatComp::LightAttackFour()
 		if (PLAnimInstance && LightAttackMontageUnarmed4)
 		{
 			PLAnimInstance->Montage_Play(LightAttackMontageUnarmed4);
-			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_LightAttacking);
 			LightAttackIndex = 0;
 			bHasAttacked = false;
 		}
@@ -203,7 +208,7 @@ void UPlayerCombatComp::StrongAttackOne()
 		if (PLAnimInstance && HeavyAttackMontageUnarmed1)
 		{
 			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed1);
-			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_HeavyAttacking);
 			HeavyAttackIndex = 1;
 			bHasAttacked = false;
 		}
@@ -218,7 +223,7 @@ void UPlayerCombatComp::StrongAttackTwo()
 		if (PLAnimInstance && HeavyAttackMontageUnarmed2)
 		{
 			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed2);
-			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_HeavyAttacking);
 			HeavyAttackIndex = 2;
 			bHasAttacked = false;
 		}
@@ -233,7 +238,7 @@ void UPlayerCombatComp::StrongAttackThree()
 		if (PLAnimInstance && HeavyAttackMontageUnarmed3)
 		{
 			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed3);
-			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_HeavyAttacking);
 			HeavyAttackIndex = 3;
 			bHasAttacked = false;
 		}
@@ -248,7 +253,7 @@ void UPlayerCombatComp::StrongAttackFour()
 		if (PLAnimInstance && HeavyAttackMontageUnarmed4)
 		{
 			PLAnimInstance->Montage_Play(HeavyAttackMontageUnarmed4);
-			PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+			PLChar->SetPlayerStatus(EPlayerStatus::EPS_HeavyAttacking);
 			HeavyAttackIndex = 0;
 			bHasAttacked = false;
 		}
@@ -340,7 +345,22 @@ void UPlayerCombatComp::StopCombo()
 
 void UPlayerCombatComp::HandleOnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload)
 {
-	//Fill in
+	if (NotifyName == FName("LeftHand")) 
+	{
+		UnarmedAttackTrace(LeftHandHitResult, FName("LeftHandMeleeSocketStart"), FName("LeftHandMeleeSocketEnd"), 10.f);
+	}
+	if (NotifyName == FName("LeftFoot"))
+	{
+		UnarmedAttackTrace(LeftFootHitResult, FName("LeftFootMeleeSocketStart"), FName("LeftFootMeleeSocketEnd"), 10.f);
+	}
+	if (NotifyName == FName("RightHand"))
+	{
+		UnarmedAttackTrace(RightHandHitResult, FName("RightHandMeleeSocketStart"), FName("RightHandMeleeSocketEnd"), 10.f);
+	}
+	if (NotifyName == FName("RightFoot"))
+	{
+		UnarmedAttackTrace(RightFootHitResult, FName("RightFootMeleeSocketStart"), FName("RightFootMeleeSocketEnd"), 10.f);
+	}
 }
 
 void UPlayerCombatComp::UnarmedAttackTrace(FHitResult& HitResult, FName SocketStartName, FName SocketEndName, float SphereRadius)
@@ -349,15 +369,13 @@ void UPlayerCombatComp::UnarmedAttackTrace(FHitResult& HitResult, FName SocketSt
 	FVector SocketLocationEnd = PLChar->GetMesh()->GetSocketLocation(SocketEndName);
 
 	TArray<TEnumAsByte<EObjectTypeQuery>>OverlapObjectTypes;
-	OverlapObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Visibility));
-
-	//Add Enemy Class
+	OverlapObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
 
 	TArray<AActor*>ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwner());
 
 	TArray<AActor*>OuActors;
-	UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), SocketLocationStart, SocketLocationEnd, SphereRadius, OverlapObjectTypes, false, ActorsToIgnore, EDrawDebugTrace::None, HitResult, true);
+	UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), SocketLocationStart, SocketLocationEnd, SphereRadius, OverlapObjectTypes, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResult, true);
 }
 
 void UPlayerCombatComp::SphereTraceForMotionWarp(FHitResult& HitResult)
@@ -388,7 +406,7 @@ void UPlayerCombatComp::HeavySkillAttack()
 			if (AnimInstance && HeavySkillAttackMontageUnarmed1)
 			{
 				AnimInstance->Montage_Play(HeavySkillAttackMontageUnarmed1);
-				PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+				PLChar->SetPlayerStatus(EPlayerStatus::EPS_HeavyAttacking);
 			}
 		}
 		break;
@@ -420,7 +438,7 @@ void UPlayerCombatComp::LightSkillAttack()
 			if (AnimInstance && LightSkillAttackMontageUnarmed1)
 			{
 				AnimInstance->Montage_Play(LightSkillAttackMontageUnarmed1);
-				PLChar->SetPlayerStatus(EPlayerStatus::EPS_Attacking);
+				PLChar->SetPlayerStatus(EPlayerStatus::EPS_LightAttacking);
 			}
 		}
 		break;

@@ -47,15 +47,10 @@ public:
 
 	FHitResult MWHit;
 
-	FHitResult LightAttackOneHit;
-	FHitResult LightAttackTwoHit;
-	FHitResult LightAttackThreeHit;
-	FHitResult LightAttackFourHit;
-
-	FHitResult StrongAttackOneHit;
-	FHitResult StrongAttackTwoHit;
-	FHitResult StrongAttackThreeHit;
-	FHitResult StrongAttackFourHit;
+	FHitResult LeftHandHitResult;
+	FHitResult LeftFootHitResult;
+	FHitResult RightHandHitResult;
+	FHitResult RightFootHitResult;
 
 	UPROPERTY(EditAnywhere, Category = Damage)
 	float LightAttackDamage;

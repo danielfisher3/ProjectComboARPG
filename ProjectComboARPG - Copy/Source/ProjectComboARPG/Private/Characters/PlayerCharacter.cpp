@@ -216,7 +216,7 @@ void APlayerCharacter::LightAttackInput()
 {
 	if (PlayerCombatComp) 
 	{
-		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || GetPlayerStatus() == EPlayerStatus::EPS_Attacking && !bCrouching)
+		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || GetPlayerStatus() == EPlayerStatus::EPS_LightAttacking && !bCrouching)
 		{
 			if (PlayerCombatComp->bCanAttack) 
 			{
@@ -230,7 +230,7 @@ void APlayerCharacter::HeavyAttackInput()
 {
 	if (PlayerCombatComp)
 	{
-		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || GetPlayerStatus() == EPlayerStatus::EPS_Attacking && !bCrouching)
+		if (GetPlayerStatus() == EPlayerStatus::EPS_Unoccupied || GetPlayerStatus() == EPlayerStatus::EPS_HeavyAttacking && !bCrouching)
 		{
 			if (PlayerCombatComp->bCanAttack)
 			{
