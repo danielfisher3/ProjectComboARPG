@@ -17,6 +17,8 @@ class UPlayerCombatComp;
 class UPlayerStatsComponent;
 class UVaultComp;
 class UMotionWarpingComponent;
+class UTargetLockComponent;
+class UBoxComponent;
 
 
 
@@ -74,6 +76,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* VaultAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* TargetLockAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* ChangeTargetLockAction;
+
+
 	/*<Input Actions>*/
 
 
@@ -83,6 +92,8 @@ public:
 	void Look(const FInputActionValue& Value);
 
 	void InitializeEnhancedInputSubSystem();
+
+	void InterpCapsuleHH(float DeltaTime);
 
 	virtual void Jump()override;
 
@@ -108,6 +119,10 @@ public:
 
 	void SkillInputActionRelease();
 
+	void ChangeTargetLock();
+
+	void ToggleTargetLockOn();
+
 	/*<Input action mappings>*/
 
 	
@@ -123,7 +138,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	UVaultComp* VaultComponent;
 
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	UTargetLockComponent* TargetLockComp;
+
 	UMotionWarpingComponent* MotionWarpingComp;
+
+	
 
 protected:
 	
@@ -131,7 +151,9 @@ protected:
 	virtual void BeginPlay() override;
 	/*<Unreal Internal / Constructors>*/
 	
-	void InterpCapsuleHH(float DeltaTime);
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* TargetLockBox;
+	
 
 private:
 
@@ -209,6 +231,8 @@ public:
 	FORCEINLINE bool GetSkillInput()const { return bSkillInput; }
 
 	FORCEINLINE UMotionWarpingComponent* GetMotionWarpingComp()const { return MotionWarpingComp; }
+
+	FORCEINLINE UBoxComponent* GetTargetLockBox()const { return TargetLockBox; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerStatus(EPlayerStatus NewStatus) { PlayerStatus = NewStatus; }

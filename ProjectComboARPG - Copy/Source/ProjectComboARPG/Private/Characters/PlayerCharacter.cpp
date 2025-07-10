@@ -11,7 +11,9 @@
 #include "PlayerComponents/PlayerCombatComp.h"
 #include "PlayerComponents/PlayerStatsComponent.h"
 #include "PlayerComponents/VaultComp.h"
+#include "PlayerComponents/TargetLockComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 #include "MotionWarpingComponent.h"
 
 
@@ -48,11 +50,16 @@ APlayerCharacter::APlayerCharacter():
 	Camera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false;
 
+
+	TargetLockBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TargetLockBox"));
+	TargetLockBox->SetupAttachment(GetRootComponent());
+
 	/*Create Actor Components*/
 	PlayerCombatComp = CreateDefaultSubobject<UPlayerCombatComp>(TEXT("PlayerCombatComp"));
 	PlayerStatsComp = CreateDefaultSubobject<UPlayerStatsComponent>(TEXT("PlayerStatsComp"));
 	VaultComponent = CreateDefaultSubobject<UVaultComp>(TEXT("Vault Comp"));
 	MotionWarpingComp = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("Motion Warping Comp"));
+	TargetLockComp = CreateDefaultSubobject <UTargetLockComponent>(TEXT("TargetLockComp"));
 	/*<Create Components and Set Controller Values>*/
 }
 
@@ -99,7 +106,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(VaultAction, ETriggerEvent::Triggered, this, &APlayerCharacter::VaultInputAction);
 		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Triggered, this, &APlayerCharacter::SkillInputActionHold);
 		EnhancedInputComponent->BindAction(SkillAction, ETriggerEvent::Completed, this, &APlayerCharacter::SkillInputActionRelease);
-		
+		EnhancedInputComponent->BindAction(TargetLockAction, ETriggerEvent::Started, this, &APlayerCharacter::ToggleTargetLockOn);
+		EnhancedInputComponent->BindAction(ChangeTargetLockAction, ETriggerEvent::Started, this, &APlayerCharacter::ChangeTargetLock);
+
 	}
 
 }
@@ -294,6 +303,24 @@ void APlayerCharacter::SkillInputActionRelease()
 {
 	bSkillInput = false;
 }
+
+void APlayerCharacter::ChangeTargetLock()
+{
+	if (TargetLockComp) 
+	{
+		TargetLockComp->ChangeTarget();
+	}
+}
+
+void APlayerCharacter::ToggleTargetLockOn()
+{
+	if (TargetLockComp) 
+	{
+		TargetLockComp->ToggleLockOn();
+	}
+}
+
+
 
 void APlayerCharacter::InterpCapsuleHH(float DeltaTime)
 {

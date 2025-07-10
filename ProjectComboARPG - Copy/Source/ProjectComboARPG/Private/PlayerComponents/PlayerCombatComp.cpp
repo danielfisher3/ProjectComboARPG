@@ -374,7 +374,7 @@ void UPlayerCombatComp::UnarmedAttackTrace(FHitResult& HitResult, FName SocketSt
 	TArray<AActor*>ActorsToIgnore;
 	ActorsToIgnore.Add(GetOwner());
 
-	TArray<AActor*>OuActors;
+	TArray<AActor*>OutActors;
 	UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), SocketLocationStart, SocketLocationEnd, SphereRadius, OverlapObjectTypes, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResult, true);
 }
 
