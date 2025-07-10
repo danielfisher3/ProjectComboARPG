@@ -8,7 +8,7 @@ ABaseEnemy::ABaseEnemy()
  	
 	PrimaryActorTick.bCanEverTick = true;
 
-	
+	Tags.Add(FName("Enemy"));
 }
 
 
